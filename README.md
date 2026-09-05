@@ -29,4 +29,4 @@ Exécuter le script SQL fourni dans database/migrations/ sur votre base MySQL.
 ## Étapes réalisées
 - Étape 0 : initialisation Git
 - Étape 1 : configuration de Composer et de l'autoloading PSR-4
-- Étape 2 : configuration d'Eloquent et connexion MySQL
+- Étape 2 : configuration d'Eloquent , connexion MySQL et creation table

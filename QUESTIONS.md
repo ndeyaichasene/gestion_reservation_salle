@@ -1,4 +1,6 @@
-# ----------------GESTION DES RESERVATIONS D'UNE SALLE UNIVERSITAIRE-------------
+# ----------------GESTION DES RESERVATIONS D'UNE SALLE UNIVERSITAIRE
+
+# ETAPE 1
 
 ## 1. Quel est le rôle de Composer ?
 

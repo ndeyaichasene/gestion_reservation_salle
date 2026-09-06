@@ -185,4 +185,63 @@ Donc on met `'active' => 'boolean'` pour permettre à Eloquent de convertir auto
 
 Parce qu'une date ne doit pas être manipulée uniquement comme une simple chaîne de caractères.
 Avec `'date_debut' => 'immutable_datetime'` .Eloquent nous permet de travailler avec des objets date/temps.
+
+# ETAPE 4
+
+## 1. Quelle différence existe entre migration et seeder ?
+
+Migration → sert à gérer la structure de la base de données.
+
+Elle permet de : créer une table ,ajouter une colonne ,modifier une structure ,supprimer une table, etc.
+
+Dans notre projet :
+
+                    migration.php
+                        ↓
+                    création de la table salles
+                    création de la table reservations
+
+Seeder → sert à gérer les données initiales de la base.
+
+Dans notre projet :
+
+                    seed.php
+                        ↓
+                    insertion des 5 salles
+
+#### *À retenir : Migration = structure | Seeder = données*
+
+## 2. Pourquoi les données initiales doivent-elles être reproductibles ?
+
+Parce qu'on doit pouvoir exécuter le seeder plusieurs fois sans problème.
+Cela permet notamment de reconstruire ou réinitialiser facilement un environnement de développement.
+
+#### *Reproductible = on peut relancer le seeder sans créer de données incohérentes ou de doublons.*
+
+
+## 3. Comment empêcher les doublons ?
+
+Dans notre projet, on utilise :
+
+                                Salle::firstOrCreate(
+                                    ['nom' => $salle['nom']],
+                                    [...]
+                                );
+
+`firstOrCreate() :`
+
+* cherche d'abord une salle avec ce nom ;
+* si elle existe → il la récupère ;
+* si elle n'existe pas → il la crée.
+
+Donc :
+
+        Salle B12 existe ?
+            │
+        ┌───┴───┐
+        OUI     NON
+        ↓        ↓
+        récupère   crée
+
+C'est ce qui permet à notre seed.php d'être réexécutable sans doublons.
                                                                     

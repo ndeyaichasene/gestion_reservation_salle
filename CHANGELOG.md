@@ -27,3 +27,8 @@
 ### Added
 - Modèles Eloquent Salle et Reservation (src/Model/)
 - Relation hasMany (Salle → Reservation) et belongsTo (Reservation → Salle)
+
+## [0.4.0] - 2026-09-06 03:34
+### Added
+- Script database/seed.php pour insérer 5 salles initiales
+- Idempotence via firstOrCreate() basé sur le nom de la salle

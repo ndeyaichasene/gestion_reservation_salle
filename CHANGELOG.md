@@ -39,3 +39,9 @@
 ### Added
 - Interface ValidatorInterface et classe ValidationResult (src/Validation/)
 - SalleValidator et ReservationValidator basés sur Respect\Validation
+
+## [0.6.0] - 2026-09-06 19:30
+### Added
+- CreerSalleDTO et CreerReservationDTO (src/DTO/)
+- Conversion des dates en DateTimeImmutable via fromArray()
+

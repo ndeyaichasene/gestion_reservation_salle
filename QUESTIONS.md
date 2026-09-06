@@ -1,6 +1,7 @@
-# ----------------GESTION DES RESERVATIONS D'UNE SALLE UNIVERSITAIRE
+#                     GESTION DES RESERVATIONS D'UNE SALLE UNIVERSITAIRE
 
-# ETAPE 1
+# -----------------------------------------ETAPE 1---------------------------------
+
 
 ## 1. Quel est le rôle de Composer ?
 
@@ -67,7 +68,8 @@ et Composer reconstruit vendor/ à partir de composer.lock.
 
 #### *À retenir : vendor/ est généré automatiquement, donc inutile de le mettre dans Git.*
 
-# ETAPE 2
+# -----------------------------------------ETAPE 2---------------------------------
+
 
 ## 1. Quel rôle joue Capsule\Manager ?
 
@@ -147,7 +149,8 @@ L'ORM va ensuite générer/exécuter le SQL nécessaire.
 
 **Attention : ORM ne signifie pas qu'on ne fait plus de SQL. L'ORM traduit nos opérations en requêtes SQL.**
 
-# ETAPE 3
+# -----------------------------------------ETAPE 3---------------------------------
+
 
 ## 1. Quel type de relation Eloquent avez-vous utilisé ?
 
@@ -186,7 +189,8 @@ Donc on met `'active' => 'boolean'` pour permettre à Eloquent de convertir auto
 Parce qu'une date ne doit pas être manipulée uniquement comme une simple chaîne de caractères.
 Avec `'date_debut' => 'immutable_datetime'` .Eloquent nous permet de travailler avec des objets date/temps.
 
-# ETAPE 4
+# -----------------------------------------ETAPE 4---------------------------------
+
 
 ## 1. Quelle différence existe entre migration et seeder ?
 
@@ -246,7 +250,7 @@ Donc :
 C'est ce qui permet à notre seed.php d'être réexécutable sans doublons.
 
 
-# ETAPE 5
+# -----------------------------------------ETAPE 5---------------------------------
 
 ## 1. Pourquoi séparer la validation syntaxique des règles métier ?
 
@@ -309,4 +313,37 @@ Le Validator vérifie la forme des données,
 le Service vérifie les règles métier, 
 le Repository enregistre les données. 
 L'interface permet d'avoir un contrat commun entre les validateurs, et 
-ValidationResult permet de retourner toutes les erreurs en une seule fois.                                                                    
+ValidationResult permet de retourner toutes les erreurs en une seule fois.     
+
+
+# -----------------------------------------ETAPE 6---------------------------------
+
+## 1.Quelle différence existe entre DTO et modèle Eloquent ?
+Le modèle Eloquent est lié à la base (Active Record) : il sait se sauvegarder, se supprimer, 
+gérer des relations. Le DTO est une structure de données pure, sans comportement de persistance,
+qui sert uniquement à transporter des données typées d'une couche à l'autre (ex: du contrôleur vers le service).
+
+#### *A Retenir :Le `DTO transporte` / Le modèle `Eloquent persiste` et représente la donnée en base.*
+
+## 2.Pourquoi le DTO ne doit-il pas appeler save() ?
+Parce que ce n'est pas son rôle : il transporte des données, il ne les
+persiste pas. Persister est la responsabilité du Repository, appelé par
+le Service — mélanger les deux violerait la `séparation des responsabilités`.
+
+## 3.À quel moment transforme-t-on les chaînes en dates ?
+Dans le DTO lui-même, au moment de sa construction (fromArray()) — c'est
+la frontière entre les données HTTP brutes (toujours des chaînes) et les
+types métier (DateTimeImmutable) utilisés par le reste de l'application.
+
+## 4.Le DTO doit-il contenir la règle de chevauchement ?
+Non. Le DTO ne fait que transporter des données déjà validées
+syntaxiquement. Vérifier un chevauchement nécessite d'interroger l'état
+de la base (les réservations existantes), ce qui relève du Service, pas
+d'une structure de données passive.
+
+#### *A retenir :*
+- `DTO` = transporter et structurer les données.
+- `Validator` = vérifier la forme des données.
+- `Service` = appliquer les règles métier.
+- `Repository` = communiquer avec la base.
+- `Eloquent` Model = représenter les données persistées.*

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-require dirname(__DIR__) . '/vendor/autoload.php';
+require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-$bootDatabase = require dirname(__DIR__) . '/config/database.php';
+$bootDatabase = require_once dirname(__DIR__) . '/config/database.php';
 $capsule = $bootDatabase();
 
 $migrations = [

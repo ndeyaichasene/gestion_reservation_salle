@@ -22,3 +22,8 @@
 - Vérification de la connexion à la base de données.
 - Préparation de la structure database/ pour la persistance des données.
 - Script SQL de création des tables salle et reservation
+
+## [0.3.0] - 2026-09-06 00:10
+### Added
+- Modèles Eloquent Salle et Reservation (src/Model/)
+- Relation hasMany (Salle → Reservation) et belongsTo (Reservation → Salle)

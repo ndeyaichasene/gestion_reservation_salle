@@ -146,3 +146,43 @@ Exemple ORM :
 L'ORM va ensuite générer/exécuter le SQL nécessaire.
 
 **Attention : ORM ne signifie pas qu'on ne fait plus de SQL. L'ORM traduit nos opérations en requêtes SQL.**
+
+# ETAPE 3
+
+## 1. Quel type de relation Eloquent avez-vous utilisé ?
+
+J'ai utilisé deux relations complémentaires :
+* HasMany dans Salle :
+
+                    $this->hasMany(Reservation::class);
+Une salle peut avoir plusieurs réservations.
+
+* BelongsTo dans Reservation :
+
+                            $this->belongsTo(Salle::class);
+
+Une réservation appartient à une seule salle.
+Donc la relation est : `Salle 1 → N Réservations`.
+
+## 2. Pourquoi déclarer $fillable ou $guarded ?
+
+Ils servent à contrôler les attributs qu'Eloquent peut remplir automatiquement (mass assignment).
+
+- Avec `$fillable`, on indique explicitement les champs autorisés 
+Cela évite notamment qu'un utilisateur puisse essayer de modifier des champs qui ne doivent pas être remplis directement, comme id.
+
+- `$guarded` fonctionne à l'inverse : on indique les champs interdits.
+
+**Dans ce projet, j'ai choisi $fillable pour avoir une liste explicite des champs autorisés.**
+
+## 3. Pourquoi convertir active en booléen ?
+
+Dans MySQL, un BOOLEAN est généralement représenté par TINYINT(1) : 1 ou 0
+Mais dans PHP, nous voulons travailler avec : true ou false
+Donc on met `'active' => 'boolean'` pour permettre à Eloquent de convertir automatiquement la valeur.
+
+## 4. Pourquoi convertir les dates en objets ?
+
+Parce qu'une date ne doit pas être manipulée uniquement comme une simple chaîne de caractères.
+Avec `'date_debut' => 'immutable_datetime'` .Eloquent nous permet de travailler avec des objets date/temps.
+                                                                    

@@ -346,4 +346,32 @@ d'une structure de données passive.
 - `Validator` = vérifier la forme des données.
 - `Service` = appliquer les règles métier.
 - `Repository` = communiquer avec la base.
-- `Eloquent` Model = représenter les données persistées.*
+- `Eloquent` Model = représenter les données persistées.
+
+
+# -----------------------------------------ETAPE 7---------------------------------
+
+
+## 1.Eloquent constitue-t-il déjà un accès aux données ?
+Oui — Eloquent est déjà un `pattern Active Record`, chaque modèle sait
+interroger et se persister lui-même (Salle::find(), $salle->save()).
+En ce sens il fournit déjà un accès aux données.
+
+## 2.Pourquoi ajouter un Repository au-dessus d'Eloquent ?
+Pour que les Services et Contrôleurs ne dépendent pas directement
+d'Eloquent, mais d'une interface. Ça permet de remplacer l'implémentation
+(tests avec un repository en mémoire, changement d'`ORM`) sans toucher au
+reste du code — c'est le `Dependency Inversion` Principle appliqué à
+l'accès aux données.
+
+## 3.Cette abstraction est-elle toujours nécessaire ?
+Pas systématiquement — pour un petit script jetable, Eloquent seul
+suffirait. Elle devient utile dès qu'on veut tester le métier sans base
+de données, ou qu'on veut isoler le code métier d'un choix technique
+(ORM) qui pourrait changer.
+
+## 4.Quel avantage apporte-t-elle ?
+Elle rend les Services testables unitairement avec une implémentation en
+mémoire (aucune connexion MySQL requise), et centralise toutes les
+requêtes d'un même agrégat (Salle, Reservation) en un seul endroit,
+plutôt que dispersées dans les contrôleurs.

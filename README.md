@@ -56,3 +56,6 @@ Dans votre dépôt GitHub, rendez-vous dans **Settings > Secrets and variables >
   1. Allez dans l'onglet **Actions** de votre dépôt GitHub.
   2. Sélectionnez **Build and Push Docker Images to Docker Hub**.
   3. Cliquez sur **Run workflow** (laissez l'option par défaut `all`).
+
+## Lancement du serveur
+php -S localhost:8000 -t public

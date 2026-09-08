@@ -403,3 +403,32 @@ En créant une implémentation en mémoire de SalleRepositoryInterface et
 ReservationRepositoryInterface (de simples tableaux PHP), injectée dans
 le service à la place des implémentations Eloquent. Comme le service ne
 dépend que de l'interface, il fonctionne indifféremment avec les deux.
+
+
+# -----------------------------------------ETAPE 10---------------------------------
+
+
+# 1.Pourquoi FastRoute ne construit-il pas lui-même le contrôleur ?
+Parce que ce n'est pas sa responsabilité : 
+FastRoute sait seulement associer
+une méthode/URI à un handler (ici un tableau [Classe, méthode]) 
+et extraire les paramètres dynamiques. 
+Construire l'objet — avec ses dépendances — relève de l'injection de dépendances, une préoccupation séparée (SRP).
+
+# 2.Quelle différence existe entre 404 et 405 ?
+`404` : la route elle-même n'existe pas pour aucune méthode HTTP (chemin
+inconnu). 
+`405` : le chemin existe, mais pas pour la méthode HTTP utilisée
+(ex: DELETE /salles alors que seules GET et POST sont définies) — dans ce
+cas la réponse doit inclure les méthodes autorisées via l'en-tête Allow.
+
+# 3.Pourquoi contraindre {id} avec \d+ ?
+Pour que FastRoute ne fasse correspondre la route qu'à des identifiants
+numériques, évitant qu'une chaîne arbitraire (/salles/abc) soit interprétée
+comme un id valide et transmise telle quelle au contrôleur — ça déplace une
+partie de la validation au niveau du routage.
+
+# 4.Quel composant doit interpréter le handler retourné ?
+Le point d'entrée (public/index.php), qui inspecte le résultat du dispatch
+et, en cas de FOUND, résout le contrôleur (via le conteneur à partir de
+l'étape 11) puis appelle la méthode avec les paramètres extraits.

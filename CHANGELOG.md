@@ -57,3 +57,17 @@
 - CreerReservationService avec les 9 règles métier de la section 5
 - AnnulerReservationService
 - SalleIndisponibleException, ReservationIntrouvableException, ReservationInvalideException
+
+
+## [0.9.0] - 2026-09-06
+### Added
+- SalleController et ReservationController (src/Controller/)
+- Composant View pour le rendu des templates avec layout
+- Vues salle/*, reservation/*, error/404, error/405
+
+
+## [0.10.0] - 2026-09-06
+### Added
+- Déclaration des routes dans routes/web.php
+- Dispatcher FastRoute dans public/index.php avec gestion NOT_FOUND/METHOD_NOT_ALLOWED/FOUND
+- En-tête Allow sur les réponses 405

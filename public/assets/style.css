@@ -1,0 +1,591 @@
+/* ==========================================================================
+   Design System Universitaire - Thème Marron & Beige (Warm Coffee & Ivory)
+   ========================================================================== */
+
+:root {
+    /* Palette Marron & Beige */
+    --primary: #6f4e37;
+    --primary-hover: #583e2b;
+    --primary-light: #f5ede6;
+    --primary-dark: #3a2316;
+
+    --secondary: #8c7361;
+    --secondary-hover: #735c4c;
+    --secondary-light: #f9f5f0;
+
+    --accent: #b45309;
+    --accent-light: #fef3c7;
+
+    --bg-body: #f8f5f0;
+    --surface: #ffffff;
+    --surface-alt: #f3ede4;
+
+    --text-main: #2c2118;
+    --text-muted: #786b61;
+
+    --border: #e6ded3;
+    --border-focus: #8b5e3c;
+
+    --success: #2d6a4f;
+    --success-bg: #eaf4ee;
+    --success-border: #c7e3d2;
+
+    --danger: #dc2626;
+    --danger-bg: #fee2e2;
+    --danger-border: #fca5a5;
+
+    --radius-sm: 8px;
+    --radius: 12px;
+    --radius-lg: 18px;
+
+    --shadow-sm: 0 1px 3px rgba(60, 40, 25, 0.05);
+    --shadow: 0 4px 12px rgba(60, 40, 25, 0.06), 0 1px 3px rgba(60, 40, 25, 0.04);
+    --shadow-lg: 0 12px 24px -4px rgba(60, 40, 25, 0.1), 0 4px 8px -2px rgba(60, 40, 25, 0.05);
+
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font);
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --------------------------------------------------------------------------
+   Navigation Bar (Espresso Foncé Élégant)
+   -------------------------------------------------------------------------- */
+header.navbar {
+    background-color: #2d1e17;
+    box-shadow: 0 2px 8px rgba(30, 15, 8, 0.18);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+nav.nav-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0.9rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: #f7f4ef;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: -0.01em;
+}
+
+.nav-brand .brand-icon {
+    font-size: 1.35rem;
+}
+
+.nav-brand:hover {
+    color: #fce7cf;
+}
+
+.nav-links {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.nav-link {
+    color: #dfd5ca;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.45rem 1rem;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-link.active {
+    color: #ffffff;
+    background-color: #6f4e37;
+    font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Contenu Principal
+   -------------------------------------------------------------------------- */
+main.main-content {
+    max-width: 1100px;
+    width: 100%;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    flex: 1;
+}
+
+/* --------------------------------------------------------------------------
+   En-tête de page
+   -------------------------------------------------------------------------- */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.75rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.page-header h1 {
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: -0.02em;
+}
+
+.page-header .subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-top: 0.2rem;
+}
+
+/* --------------------------------------------------------------------------
+   Boutons Chaleureux Marron & Beige
+   -------------------------------------------------------------------------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.55rem 1.15rem;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    gap: 0.45rem;
+    line-height: 1.4;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #784e3a 0%, #633e2d 100%);
+    color: #ffffff;
+    box-shadow: 0 2px 5px rgba(99, 62, 45, 0.25);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #653f2c 0%, #503022 100%);
+    box-shadow: 0 4px 10px rgba(99, 62, 45, 0.35);
+    transform: translateY(-1px);
+    color: #ffffff;
+}
+
+.btn-secondary {
+    background-color: var(--primary-light);
+    color: #5c3d2e;
+    border: 1px solid #dfd2c4;
+}
+
+.btn-secondary:hover {
+    background-color: #ebe0d5;
+    border-color: #d1bead;
+    color: #432818;
+    transform: translateY(-1px);
+}
+
+.btn-danger {
+    background-color: var(--danger);
+    color: #ffffff;
+    box-shadow: 0 2px 5px rgba(154, 52, 18, 0.25);
+}
+
+.btn-danger:hover {
+    background-color: #7c2d12;
+    transform: translateY(-1px);
+    color: #ffffff;
+}
+
+.btn-sm {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.82rem;
+}
+
+/* --------------------------------------------------------------------------
+   Cartes & Conteneurs
+   -------------------------------------------------------------------------- */
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+}
+
+/* --------------------------------------------------------------------------
+   Tableaux Modernes avec teintes chaudes
+   -------------------------------------------------------------------------- */
+.table-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.92rem;
+}
+
+table th {
+    background-color: var(--surface-alt);
+    color: #523c2e;
+    padding: 0.95rem 1.25rem;
+    font-weight: 700;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid var(--border);
+}
+
+table td {
+    padding: 1.05rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-main);
+    vertical-align: middle;
+}
+
+table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+table tbody tr:hover {
+    background-color: #faf6f1;
+}
+
+.salle-name-link {
+    font-weight: 600;
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.salle-name-link:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+.batiment-tag {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    background-color: var(--primary-light);
+    color: #634832;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* --------------------------------------------------------------------------
+   Badges Chaleureux
+   -------------------------------------------------------------------------- */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.8rem;
+    border-radius: 9999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1;
+}
+
+.badge-success {
+    background-color: var(--success-bg);
+    color: var(--success);
+    border: 1px solid var(--success-border);
+}
+
+.badge-danger {
+    background-color: var(--danger-bg);
+    color: var(--danger);
+    border: 1px solid var(--danger-border);
+}
+
+.badge-type {
+    background-color: #efebe6;
+    color: #5c3d2e;
+    border: 1px solid #dfd5ca;
+}
+
+.badge-type-amphitheatre {
+    background-color: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+.badge-type-informatique {
+    background-color: #f5ede6;
+    color: #6f4e37;
+    border: 1px solid #dfd2c4;
+}
+
+.badge-type-cours {
+    background-color: #f1edfa;
+    color: #5b21b6;
+    border: 1px solid #ddd6fe;
+}
+
+.badge-type-laboratoire {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+}
+
+.badge-type-reunion {
+    background-color: #f3ede4;
+    color: #4a382d;
+    border: 1px solid #d9ccbe;
+}
+
+/* --------------------------------------------------------------------------
+   Barre de Filtrage
+   -------------------------------------------------------------------------- */
+.filter-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.filter-bar label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #4a382d;
+}
+
+.filter-bar select {
+    padding: 0.5rem 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    background-color: #faf8f5;
+    color: var(--text-main);
+    cursor: pointer;
+}
+
+.filter-bar select:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.15);
+}
+
+/* --------------------------------------------------------------------------
+   Formulaires Raffinés
+   -------------------------------------------------------------------------- */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.form-group label {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #4a382d;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.65rem 0.95rem;
+    border: 1px solid #d8cec1;
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: var(--text-main);
+    background-color: #faf8f5;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.18);
+}
+
+.form-control.is-invalid {
+    border-color: var(--danger);
+    background-color: #fff9f7;
+}
+
+.erreur-text {
+    font-size: 0.82rem;
+    color: var(--danger);
+    font-weight: 500;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0;
+}
+
+.form-check input[type="checkbox"] {
+    width: 1.15rem;
+    height: 1.15rem;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+.form-check label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-main);
+    cursor: pointer;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    align-items: center;
+}
+
+/* --------------------------------------------------------------------------
+   Alertes Flash Chaleureuses
+   -------------------------------------------------------------------------- */
+.alert {
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    font-size: 0.92rem;
+    font-weight: 500;
+}
+
+.alert-success {
+    background-color: var(--success-bg);
+    border: 1px solid var(--success-border);
+    color: #1b4d32;
+}
+
+.alert-danger {
+    background-color: var(--danger-bg);
+    border: 1px solid var(--danger-border);
+    color: #7c2d12;
+}
+
+.alert-icon {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* --------------------------------------------------------------------------
+   Grille de Détails (Fiche Salle & Réservation)
+   -------------------------------------------------------------------------- */
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+}
+
+.detail-item {
+    background: #f9f6f1;
+    border: 1px solid #e8ded3;
+    border-radius: var(--radius-sm);
+    padding: 1.1rem 1.25rem;
+}
+
+.detail-item .label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    margin-bottom: 0.35rem;
+}
+
+.detail-item .value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.detail-item .value a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.detail-item .value a:hover {
+    text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+   Pages d'erreur 404 / 405
+   -------------------------------------------------------------------------- */
+.error-page {
+    text-align: center;
+    padding: 4rem 2rem;
+    max-width: 520px;
+    margin: 2rem auto;
+}
+
+.error-page .error-code {
+    font-size: 4.5rem;
+    font-weight: 800;
+    color: #9a3412;
+    line-height: 1;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.04em;
+}
+
+.error-page h2 {
+    font-size: 1.5rem;
+    color: var(--text-main);
+    margin-bottom: 0.6rem;
+}
+
+.error-page p {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    font-size: 1.05rem;
+}
+
+/* --------------------------------------------------------------------------
+   Pied de page
+   -------------------------------------------------------------------------- */
+.footer {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-top: auto;
+    border-top: 1px solid var(--border);
+    background-color: var(--surface);
+}

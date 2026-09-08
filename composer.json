@@ -20,5 +20,13 @@
         "illuminate/database": "^12.0",
         "php-di/php-di": "^7.0",
         "vlucas/phpdotenv": "^5.7"
+    },
+    "scripts": {
+        "migrate": "php database/migrate.php",
+        "seed": "php database/seed.php",
+        "db:setup": [
+            "@migrate",
+            "@seed"
+        ]
     }
 }

@@ -34,10 +34,10 @@ class ReservationRepository implements ReservationRepositoryInterface{
     public function getConflitReservation(int $salleId,\DateTimeImmutable $debut,\DateTimeImmutable $fin):?Reservation
     {
         return Reservation::where('salle_id', $salleId)
-        ->where('statut','confirmee')
-        ->where('date_debut', '<', $fin)->format('Y-m-d H:i') 
-        ->where('date_fin', '>', $debut)->format('Y-m-d H:i') 
-        ->first();
+            ->where('statut', 'confirmee')
+            ->where('date_debut', '<', $fin->format('Y-m-d H:i:s'))
+            ->where('date_fin', '>', $debut->format('Y-m-d H:i:s'))
+            ->first();
     }
 
     public function annulerReservation(Reservation $reservation):Reservation{

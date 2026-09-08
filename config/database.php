@@ -10,15 +10,15 @@ use Dotenv\Dotenv;
 $dotenv = Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->safeLoad();
 
-return function():Capsule{
+return function(): Capsule {
     $capsule = new Capsule();
     $capsule->addConnection([
-        'driver' => $_ENV['DB_DRIVER'],
-        'host' => $_ENV['DB_HOST'],
-        'port' => $_ENV['DB_PORT'],
-        'database' => $_ENV['DB_DATABASE'],
-        'username' => $_ENV['DB_USERNAME'],
-        'password' => $_ENV['DB_PASSWORD'],
+        'driver'    => getenv('DB_DRIVER') ?: ($_ENV['DB_DRIVER'] ?? 'mysql'),
+        'host'      => getenv('DB_HOST') ?: ($_ENV['DB_HOST'] ?? '127.0.0.1'),
+        'port'      => (int) (getenv('DB_PORT') ?: ($_ENV['DB_PORT'] ?? 3306)),
+        'database'  => getenv('DB_DATABASE') ?: ($_ENV['DB_DATABASE'] ?? 'reservation_salles'),
+        'username'  => getenv('DB_USERNAME') ?: ($_ENV['DB_USERNAME'] ?? 'aicha'),
+        'password'  => getenv('DB_PASSWORD') !== false ? (string) getenv('DB_PASSWORD') : (string) ($_ENV['DB_PASSWORD'] ?? 'passer'),
         'charset'   => 'utf8mb4',
         'collation' => 'utf8mb4_unicode_ci',
         'prefix'    => '',
@@ -28,9 +28,8 @@ return function():Capsule{
 
     try {
         $capsule->getConnection()->getPdo();
-        
     } catch (\PDOException $e) {
-        throw new \RuntimeException('Connexion a la base de donnees impossible : '.$e->getMessage());
+        throw new \RuntimeException('Connexion a la base de donnees impossible : ' . $e->getMessage());
     }
 
     return $capsule;

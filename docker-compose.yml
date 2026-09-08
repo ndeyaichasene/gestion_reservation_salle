@@ -1,0 +1,54 @@
+services:
+  # Base de données MySQL 8
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${DB_DATABASE:-reservation_salles}
+      MYSQL_USER: ${DB_USERNAME:-aicha}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-passer}
+    ports:
+      - "${DB_HOST_PORT:-3305}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - salles_net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Application PHP 8.3
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${APP_PORT:-8081}:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      APP_ENV: development
+      APP_DEBUG: "true"
+      APP_URL: http://localhost:${APP_PORT:-8081}
+      DB_DRIVER: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: ${DB_DATABASE:-reservation_salles}
+      DB_USERNAME: ${DB_USERNAME:-aicha}
+      DB_PASSWORD: ${DB_PASSWORD:-passer}
+    networks:
+      - salles_net
+
+volumes:
+  mysql_data:
+
+networks:
+  salles_net:
+    driver: bridge

@@ -43,6 +43,9 @@ jobs:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           REPO_NAME: gestion_reservation_salle
         run: |
+          # Normaliser le nom d'utilisateur en minuscules pour Docker Hub
+          DOCKER_USER=$(echo "$DOCKERHUB_USERNAME" | tr '[:upper:]' '[:lower:]')
+          
           # Identifier la liste des tags à traiter
           if [ "${{ github.event_name }}" = "push" ]; then
             TAGS_TO_BUILD=("${{ github.ref_name }}")
@@ -66,17 +69,25 @@ jobs:
             
             git checkout "$tag"
             
-            # S'assurer que le Dockerfile existe même sur les anciens commits
-            if [ ! -f Dockerfile ]; then
-              echo "Dockerfile absent sur $tag, copie du Dockerfile de référence"
-              cp /tmp/docker-assets/Dockerfile ./Dockerfile
-              [ -f /tmp/docker-assets/.dockerignore ] && cp /tmp/docker-assets/.dockerignore ./.dockerignore || true
+            # S'assurer que le Dockerfile de référence est présent
+            cp /tmp/docker-assets/Dockerfile ./Dockerfile
+            [ -f /tmp/docker-assets/.dockerignore ] && cp /tmp/docker-assets/.dockerignore ./.dockerignore || true
+            
+            # Secours pour les tags initiaux (ex: v0.0.0) antérieurs à Composer et public/
+            if [ ! -f composer.json ]; then
+              echo "composer.json absent sur $tag, creation d'un composer minimal"
+              echo '{"name": "aicha/gestion_reservation_salle"}' > composer.json
+            fi
+            if [ ! -d public ]; then
+              echo "public/ absent sur $tag, creation du dossier public"
+              mkdir -p public
+              echo '<!DOCTYPE html><html><body><h1>Gestion des reservations - Initialisation</h1></body></html>' > public/index.php
             fi
             
-            IMAGE_TAG="${DOCKERHUB_USERNAME}/${REPO_NAME}:${tag}"
+            IMAGE_TAG="${DOCKER_USER}/${REPO_NAME}:${tag}"
             EXTRA_TAGS=""
             if [ "$tag" = "$LATEST_TAG" ]; then
-              EXTRA_TAGS="-t ${DOCKERHUB_USERNAME}/${REPO_NAME}:latest"
+              EXTRA_TAGS="-t ${DOCKER_USER}/${REPO_NAME}:latest"
             fi
             
             docker buildx build \

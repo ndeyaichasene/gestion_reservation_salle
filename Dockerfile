@@ -35,14 +35,17 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 # 7. Copie des descripteurs de dépendances et installation (mise en cache Docker)
-COPY composer.json composer.lock* ./
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts --prefer-dist || true
+COPY composer.json* composer.lock* ./
+RUN if [ -f composer.json ]; then \
+        composer install --no-dev --optimize-autoloader --no-interaction --no-scripts --prefer-dist || true; \
+    fi
 
 # 8. Copie du code source complet
 COPY . /var/www/html
 
 # 9. Autoload final et permissions www-data
-RUN composer dump-autoload --optimize && \
+RUN if [ -f composer.json ]; then composer dump-autoload --optimize || true; fi && \
+    mkdir -p /var/www/html/public && \
     chown -R www-data:www-data /var/www/html
 
 EXPOSE 80

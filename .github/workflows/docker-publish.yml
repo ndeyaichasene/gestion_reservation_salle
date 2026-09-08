@@ -67,7 +67,10 @@ jobs:
             echo "Building image for tag: $tag"
             echo "=========================================="
             
-            git checkout "$tag"
+            # Nettoyer l'arbre de travail et basculer sur le tag
+            git reset --hard
+            git clean -fd
+            git checkout -f "$tag"
             
             # S'assurer que le Dockerfile de référence est présent
             cp /tmp/docker-assets/Dockerfile ./Dockerfile

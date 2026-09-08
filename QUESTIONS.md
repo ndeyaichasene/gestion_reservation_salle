@@ -375,3 +375,31 @@ Elle rend les Services testables unitairement avec une implémentation en
 mémoire (aucune connexion MySQL requise), et centralise toutes les
 requêtes d'un même agrégat (Salle, Reservation) en un seul endroit,
 plutôt que dispersées dans les contrôleurs.
+
+
+# -----------------------------------------ETAPE 8---------------------------------
+
+
+
+# 1.Pourquoi ces règles ne sont-elles pas dans le contrôleur ?
+Parce que le contrôleur gère la couche HTTP (lire la requête, appeler le
+validateur, rediriger), pas la logique métier. Mélanger les deux rendrait
+les règles impossibles à tester sans simuler une requête HTTP, et les
+dupliquerait si une autre entrée (API, CLI) devait un jour créer des
+réservations.
+
+# 2.Pourquoi le service dépend-il d'une interface de Repository ?
+Pour respecter le Dependency Inversion Principle : le service dépend
+d'une abstraction, pas d'Eloquent. Ça permet de le tester avec un
+repository en mémoire, sans MySQL, et de changer d'implémentation sans
+modifier le service.
+
+# 3.Quelle exception doit être levée en cas de conflit ?
+SalleIndisponibleException (via sa factory statique chevauchement()),
+conformément à la règle métier n°9 du sujet.
+
+# 4.Comment tester le service sans MySQL ?
+En créant une implémentation en mémoire de SalleRepositoryInterface et
+ReservationRepositoryInterface (de simples tableaux PHP), injectée dans
+le service à la place des implémentations Eloquent. Comme le service ne
+dépend que de l'interface, il fonctionne indifféremment avec les deux.

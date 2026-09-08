@@ -45,8 +45,15 @@
 - CreerSalleDTO et CreerReservationDTO (src/DTO/)
 - Conversion des dates en DateTimeImmutable via fromArray()
 
-## [0.7.0] - 2026-09-06
+## [0.7.0] - 2026-09-7
 ### Added
 - SalleRepositoryInterface et ReservationRepositoryInterface (src/Repository/)
 - SalleRepository et ReservationRepository
 - Méthode getConflit() implémentant la formule de chevauchement du sujet
+
+
+## [0.8.0] - 2026-09-08
+### Added
+- CreerReservationService avec les 9 règles métier de la section 5
+- AnnulerReservationService
+- SalleIndisponibleException, ReservationIntrouvableException, ReservationInvalideException

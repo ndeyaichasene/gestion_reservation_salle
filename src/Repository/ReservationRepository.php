@@ -35,8 +35,8 @@ class ReservationRepository implements ReservationRepositoryInterface{
     {
         return Reservation::where('salle_id', $salleId)
         ->where('statut','confirmee')
-        ->where('date_debut', '<', $fin)
-        ->where('date_fin', '>', $debut)
+        ->where('date_debut', '<', $fin)->format('Y-m-d H:i') 
+        ->where('date_fin', '>', $debut)->format('Y-m-d H:i') 
         ->first();
     }
 

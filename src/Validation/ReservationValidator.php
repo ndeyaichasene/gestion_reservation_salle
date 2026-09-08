@@ -30,10 +30,10 @@ final class ReservationValidator implements ValidatorInterface
         }
 
         if (!empty($errors)) {
-           return ValidationResult::failure($errors);
+           return ValidationResult::failure($errors,$data);
         }
 
-        return ValidationResult::success();
+        return ValidationResult::success($data);
     }
     
 }

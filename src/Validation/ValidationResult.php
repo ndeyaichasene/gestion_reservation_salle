@@ -9,14 +9,15 @@ final class ValidationResult{
     public function __construct(
         private readonly bool $valid,
         private readonly array $errors,
+        private readonly array $data,
     ){}
     
-    public static function success():self{
-        return new self(true,[]);
+    public static function success(array $data):self{
+        return new self(true,[],$data);
     }
 
-    public static function failure(array $errors):self{
-        return new self(false,$errors);
+    public static function failure(array $errors,array $data=[]):self{
+        return new self(false,$errors, $data);
     }
 
     public function isValid():bool{
@@ -25,6 +26,10 @@ final class ValidationResult{
 
     public function errors():array{
         return $this->errors;
+    }
+
+    public function data():array{
+        return $this->data;
     }
 
 

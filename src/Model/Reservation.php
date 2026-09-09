@@ -26,6 +26,8 @@ final class Reservation extends Model
         'date_fin'   => 'immutable_datetime',
     ];
 
+    protected $dateFormat = 'Y-m-d H:i:s';
+
     public function salle(): BelongsTo
     {
         return $this->belongsTo(Salle::class);

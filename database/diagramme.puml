@@ -1,0 +1,33 @@
+@startuml  diagramme_classe
+
+class Salle {
+    - id : int
+    - nom : string
+    - batiment : string
+    - capacite : int
+    - type : string
+    - active : bool
+    - created_at : datetime
+    - updated_at : datetime
+
+    + reservations() : HasMany
+}
+
+class Reservation {
+    - id : int
+    - salle_id : int
+    - responsable : string
+    - email : string
+    - motif : string
+    - date_debut : DateTimeImmutable
+    - date_fin : DateTimeImmutable
+    - statut : string
+    - created_at : datetime
+    - updated_at : datetime
+
+    + salle() : BelongsTo
+}
+
+Salle "1" -- "0..*" Reservation : possède
+
+@enduml

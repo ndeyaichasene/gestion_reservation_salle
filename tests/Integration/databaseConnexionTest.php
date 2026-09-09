@@ -2,12 +2,18 @@
 
 declare(strict_types=1);
 
-require dirname(__DIR__) . '/vendor/autoload.php';
+namespace Tests\Integration;
 
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
-$dotenv->load();
+use Illuminate\Database\Capsule\Manager as Capsule;
+use PHPUnit\Framework\TestCase;
 
-$bootDatabase = require dirname(__DIR__) . '/config/database.php';
-$bootDatabase();
+final class databaseConnexionTest extends TestCase
+{
+    public function testConnexionEloquentEstEtablie(): void
+    {
+        $bootDatabase = require dirname(__DIR__, 2) . '/config/database.php';
+        $bootDatabase();
 
-echo "Connexion Eloquent OK";
+        $this->assertNotNull(Capsule::connection()->getPdo());
+    }
+}

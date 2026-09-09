@@ -403,3 +403,68 @@ En créant une implémentation en mémoire de SalleRepositoryInterface et
 ReservationRepositoryInterface (de simples tableaux PHP), injectée dans
 le service à la place des implémentations Eloquent. Comme le service ne
 dépend que de l'interface, il fonctionne indifféremment avec les deux.
+
+
+# -----------------------------------------ETAPE 10---------------------------------
+
+
+# 1.Pourquoi FastRoute ne construit-il pas lui-même le contrôleur ?
+Parce que ce n'est pas sa responsabilité : 
+FastRoute sait seulement associer
+une méthode/URI à un handler (ici un tableau [Classe, méthode]) 
+et extraire les paramètres dynamiques. 
+Construire l'objet — avec ses dépendances — relève de l'injection de dépendances, une préoccupation séparée (SRP).
+
+# 2.Quelle différence existe entre 404 et 405 ?
+`404` : la route elle-même n'existe pas pour aucune méthode HTTP (chemin
+inconnu). 
+`405` : le chemin existe, mais pas pour la méthode HTTP utilisée
+(ex: DELETE /salles alors que seules GET et POST sont définies) — dans ce
+cas la réponse doit inclure les méthodes autorisées via l'en-tête Allow.
+
+# 3.Pourquoi contraindre {id} avec \d+ ?
+Pour que FastRoute ne fasse correspondre la route qu'à des identifiants
+numériques, évitant qu'une chaîne arbitraire (/salles/abc) soit interprétée
+comme un id valide et transmise telle quelle au contrôleur — ça déplace une
+partie de la validation au niveau du routage.
+
+# 4.Quel composant doit interpréter le handler retourné ?
+Le point d'entrée (public/index.php), qui inspecte le résultat du dispatch
+et, en cas de FOUND, résout le contrôleur (via le conteneur à partir de
+l'étape 11) puis appelle la méthode avec les paramètres extraits.
+
+
+# -----------------------------------------ETAPE 10---------------------------------
+
+
+# 1.Quelle différence existe entre injection et conteneur ?
+- L'injection de dépendances est un principe : une classe reçoit ses
+dépendances de l'extérieur (par constructeur) plutôt que de les créer elle-même.
+- Le conteneur est un outil qui automatise la résolution et la
+construction de ces dépendances à grande échelle, mais le principe
+d'injection s'applique même sans conteneur (ex: new Service($dep)).
+
+# 2.Qu'est-ce que l'autowiring ?
+La capacité de PHP-DI à inspecter automatiquement, via Reflection, les
+types des paramètres du constructeur d'une classe, et à construire ces
+dépendances lui-même sans définition explicite — tant que ce sont des
+classes concrètes et non ambiguës.
+
+# 3.Pourquoi les interfaces nécessitent-elles une définition ?
+Parce que l'autowiring ne peut pas deviner quelle implémentation concrète
+choisir pour une interface (ex: plusieurs classes pourraient implémenter
+SalleRepositoryInterface) — il faut lever explicitement cette ambiguïté
+dans config/container.php.
+
+# 4.Pourquoi limiter $container->get() au point d'entrée ?
+Pour éviter que le conteneur se propage dans tout le code métier. Si
+chaque classe pouvait interroger le conteneur, les dépendances
+deviendraient implicites et cachées, rendant le code difficile à tester
+et à comprendre sans connaître le contenu du conteneur.
+
+# 5.Quel anti-pattern apparaît si toutes les classes interrogent le conteneur ?
+Le Service Locator : les classes ne déclarent plus leurs dépendances de
+façon explicite (via leur constructeur), elles les récupèrent à la
+demande depuis un objet global — ça masque le couplage réel, complique
+les tests (il faut simuler tout le conteneur) et viole l'inversion de
+contrôle que l'injection de dépendances est censée apporter.

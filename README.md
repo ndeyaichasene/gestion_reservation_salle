@@ -37,7 +37,7 @@ docker compose down
 - Copier `.env.example` vers `.env` et renseigner les identifiants MySQL.
 - `php database/migrate.php`
 - `php database/seed.php`
-- `php -S localhost:8000 -t public`
+- `composer serve` (ou `php -S localhost:8001 -t public`)
 
 ---
 
@@ -58,7 +58,10 @@ Dans votre dépôt GitHub, rendez-vous dans **Settings > Secrets and variables >
   3. Cliquez sur **Run workflow** (laissez l'option par défaut `all`).
 
 ## Lancement du serveur
-php -S localhost:8000 -t public
+```bash
+composer serve
+# ou : php -S localhost:8001 -t public
+```
 
 ## Exécution des tests
 composer install --dev

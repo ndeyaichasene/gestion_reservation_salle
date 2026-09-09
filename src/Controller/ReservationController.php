@@ -29,9 +29,7 @@ final class ReservationController
 
     public function index(): string
     {
-        $salleId = isset($_GET['salle_id']) && $_GET['salle_id'] !== ''
-            ? (int) $_GET['salle_id']
-            : null;
+        $salleId = isset($_GET['salle_id']) && $_GET['salle_id'] !== '' ? (int) $_GET['salle_id'] : null;
 
         if ($salleId !== null) {
             $reservations = $this->reservations->getReservationBySalle($salleId);

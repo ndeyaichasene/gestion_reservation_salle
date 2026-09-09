@@ -9,18 +9,14 @@ use App\Controller\ReservationController;
 use App\Controller\SalleController;
 use App\Repository\ReservationRepositoryInterface;
 use App\Repository\SalleRepositoryInterface;
-use DI\ContainerBuilder;
+use App\config\ContainerFactory;
 use PHPUnit\Framework\TestCase;
 
 final class ContainerTest extends TestCase
 {
     public function testContainerResoutLesDependances(): void
     {
-        $builder = new ContainerBuilder();
-        $builder->addDefinitions(
-            dirname(__DIR__, 2) . '/config/container.php'
-        );
-        $container = $builder->build();
+        $container = ContainerFactory::create();
 
         $this->assertInstanceOf(
             SalleRepositoryInterface::class,

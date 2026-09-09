@@ -6,7 +6,7 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Schema\Blueprint;
 
 return function(Capsule $capsule):void{
-    if(!$capsule->schema()->hasTable('salle')){
+    if(!$capsule->schema()->hasTable('salles')){
     $capsule->schema()->create('salles',function(Blueprint $table){
         $table->id();
         $table->string('nom',100);
@@ -21,6 +21,6 @@ return function(Capsule $capsule):void{
     });
          echo "table salles cree " . PHP_EOL;
     }else{
-        echo "table reservation existe deja" . PHP_EOL;
+        echo "table salles existe deja" . PHP_EOL;
     }
 };

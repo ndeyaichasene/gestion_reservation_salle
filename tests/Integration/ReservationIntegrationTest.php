@@ -7,6 +7,7 @@ namespace Tests\Integration;
 use App\Model\Reservation;
 use App\Model\Salle;
 use App\Repository\ReservationRepository;
+use Illuminate\Database\Capsule\Manager as Capsule;
 use PHPUnit\Framework\TestCase;
 
 final class ReservationIntegrationTest extends TestCase
@@ -17,12 +18,13 @@ final class ReservationIntegrationTest extends TestCase
 
         $bootDatabase = require dirname(__DIR__, 2) . '/config/database.php';
         $bootDatabase();
+
+        Capsule::connection()->beginTransaction();
     }
 
     protected function tearDown(): void
     {
-        Reservation::query()->delete();
-        Salle::query()->delete();
+        Capsule::connection()->rollBack();
 
         parent::tearDown();
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Integration;
+namespace Tests\Integration;
 
 use DI\ContainerBuilder;
 use Illuminate\Database\Capsule\Manager ;

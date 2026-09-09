@@ -1,0 +1,25 @@
+<?php
+
+declare(strict_types=1);
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+$rawCommand = $argv[1] ?? basename(__FILE__);
+
+// Découpage avec explode sur ':' ou '.'
+if (str_contains($rawCommand, ':')) {
+    [$namespace, $action] = explode(':', $rawCommand, 2);
+} elseif (str_contains($rawCommand, '.')) {
+    [$namespace, $action] = explode('.', $rawCommand, 2);
+} else {
+    $namespace = 'aicha';
+    $action = $rawCommand;
+}
+
+echo "[CLI {$namespace}] Exécution de l'action : {$action}...\n";
+
+match ($action) {
+    'migrate' => require __DIR__ . '/database/migrate.php',
+    'seed'    => require __DIR__ . '/database/seed.php',
+    default   => fwrite(STDERR, "Action inconnue : '{$action}'. Commandes disponibles : migrate, seed\n"),
+};

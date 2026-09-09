@@ -79,3 +79,11 @@
 ### Changed
 - public/index.php simplifié : construit le conteneur puis délègue à Application
 - Application reçoit désormais ContainerInterface et Dispatcher par constructeur, et gère le dispatch (déplacé depuis index.php)
+
+## [0.12.0] - 2026-09-06
+### Added
+- PHPUnit et phpunit.xml
+- InMemorySalleRepository et InMemoryReservationRepository (doublures de test)
+- Tests unitaires de CreerReservationService (8 scénarios de la section 5)
+- Tests de validation (SalleValidator, ReservationValidator)
+- Tests d'intégration Eloquent (création, relation, chevauchement, annulation)

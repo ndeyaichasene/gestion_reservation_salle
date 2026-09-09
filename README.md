@@ -59,3 +59,7 @@ Dans votre dépôt GitHub, rendez-vous dans **Settings > Secrets and variables >
 
 ## Lancement du serveur
 php -S localhost:8000 -t public
+
+## Exécution des tests
+composer install --dev
+vendor/bin/phpunit

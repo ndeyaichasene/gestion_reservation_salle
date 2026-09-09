@@ -71,3 +71,11 @@
 - Déclaration des routes dans routes/web.php
 - Dispatcher FastRoute dans public/index.php avec gestion NOT_FOUND/METHOD_NOT_ALLOWED/FOUND
 - En-tête Allow sur les réponses 405
+
+
+## [0.11.0] - 2026-09-06
+### Added
+- config/container.php avec définitions PHP-DI (autowire + factory)
+### Changed
+- public/index.php simplifié : construit le conteneur puis délègue à Application
+- Application reçoit désormais ContainerInterface et Dispatcher par constructeur, et gère le dispatch (déplacé depuis index.php)

@@ -1,89 +1,156 @@
 # Changelog
 
+## [0.0.0] - 2026-09-05
 
-## [0.0.0] - 2026-09-05 13:20
 ### Added
-- Initialisation du dépôt Git
-- Preparer .gitignore
 
+* Initialisation du dépôt Git.
+* Préparation du fichier `.gitignore`.
 
-## [0.1.0] - 2026-09-05 17:02
+## [0.1.0] - 2026-09-05
+
 ### Added
-- Configuration de l'autoloading PSR-4
-- Installation des dépendances (FastRoute,Eloquent, PHP-DI, Respect/Validation)
-- Creer l'arborescence du projet
 
-## [0.2.0] - 2026-09-05 18:49
+* Configuration de l'autoloading PSR-4 avec Composer.
+* Installation des dépendances :
+
+  * FastRoute
+  * Eloquent
+  * PHP-DI
+  * Respect/Validation
+  * PHP dotenv
+* Création de l'arborescence du projet.
+
+## [0.2.0] - 2026-09-05
+
 ### Added
-- Configuration d'Eloquent ORM avec illuminate/database.
-- Configuration de la connexion MySQL avec Capsule\Manager (Eloquent hors Laravel)
-- Chargement des variables d'environnement via phpdotenv
-- Ajout du fichier .env.example.
-- Vérification de la connexion à la base de données.
-- Préparation de la structure database/ pour la persistance des données.
-- Script SQL de création des tables salle et reservation
 
-## [0.3.0] - 2026-09-06 00:10
+* Configuration d'Eloquent ORM avec `illuminate/database`.
+* Configuration de la connexion MySQL avec `Capsule\Manager`.
+* Chargement des variables d'environnement avec `phpdotenv`.
+* Ajout du fichier `.env.example`.
+* Vérification de la connexion à la base de données.
+* Préparation de la structure `database/` pour la persistance.
+* Création des migrations des tables `salles` et `reservations`.
+
+## [0.3.0] - 2026-09-06
+
 ### Added
-- Modèles Eloquent Salle et Reservation (src/Model/)
-- Relation hasMany (Salle → Reservation) et belongsTo (Reservation → Salle)
 
+* Ajout des modèles Eloquent `Salle` et `Reservation`.
+* Mise en place de la relation `hasMany` entre `Salle` et `Reservation`.
+* Mise en place de la relation `belongsTo` entre `Reservation` et `Salle`.
 
-## [0.4.0] - 2026-09-06 03:34
+## [0.4.0] - 2026-09-06
+
 ### Added
-- Script database/seed.php pour insérer 5 salles initiales
-- Idempotence via firstOrCreate() basé sur le nom de la salle
 
+* Ajout du script `database/seed.php`.
+* Insertion de 5 salles initiales.
+* Mise en place d'un seed idempotent avec `firstOrCreate()`.
 
-## [0.5.0] - 2026-09-06 14:17
+## [0.5.0] - 2026-09-06
+
 ### Added
-- Interface ValidatorInterface et classe ValidationResult (src/Validation/)
-- SalleValidator et ReservationValidator basés sur Respect\Validation
 
-## [0.6.0] - 2026-09-06 19:30
+* Ajout de `ValidatorInterface`.
+* Ajout de `ValidationResult`.
+* Ajout de `SalleValidator`.
+* Ajout de `ReservationValidator`.
+* Utilisation de Respect/Validation pour les règles de validation.
+
+## [0.6.0] - 2026-09-06
+
 ### Added
-- CreerSalleDTO et CreerReservationDTO (src/DTO/)
-- Conversion des dates en DateTimeImmutable via fromArray()
 
-## [0.7.0] - 2026-09-7
+* Ajout de `CreerSalleDTO`.
+* Ajout de `CreerReservationDTO`.
+* Conversion des données de réservation en objets `DateTimeImmutable`.
+* Ajout des Builders associés aux DTO.
+
+## [0.7.0] - 2026-09-07
+
 ### Added
-- SalleRepositoryInterface et ReservationRepositoryInterface (src/Repository/)
-- SalleRepository et ReservationRepository
-- Méthode getConflit() implémentant la formule de chevauchement du sujet
 
+* Ajout de `SalleRepositoryInterface`.
+* Ajout de `ReservationRepositoryInterface`.
+* Ajout des implémentations des repositories.
+* Encapsulation des accès Eloquent dans les repositories.
+* Implémentation de la détection des conflits de réservation.
 
 ## [0.8.0] - 2026-09-08
-### Added
-- CreerReservationService avec les 9 règles métier de la section 5
-- AnnulerReservationService
-- SalleIndisponibleException, ReservationIntrouvableException, ReservationInvalideException
 
+### Added
+
+* Ajout de `CreerReservationService`.
+* Implémentation des règles métier liées aux réservations.
+* Ajout de `AnnulerReservationService`.
+* Ajout de `SalleIndisponibleException`.
+* Ajout de `ReservationIntrouvableException`.
+* Ajout de `ReservationInvalideException`.
 
 ## [0.9.0] - 2026-09-06
-### Added
-- SalleController et ReservationController (src/Controller/)
-- Composant View pour le rendu des templates avec layout
-- Vues salle/*, reservation/*, error/404, error/405
 
+### Added
+
+* Ajout de `SalleController`.
+* Ajout de `ReservationController`.
+* Ajout du composant `Renderer`.
+* Ajout des templates des salles.
+* Ajout des templates des réservations.
+* Ajout des pages d'erreur 404 et 405.
+* Mise en place du layout commun.
 
 ## [0.10.0] - 2026-09-06
-### Added
-- Déclaration des routes dans routes/web.php
-- Dispatcher FastRoute dans public/index.php avec gestion NOT_FOUND/METHOD_NOT_ALLOWED/FOUND
-- En-tête Allow sur les réponses 405
 
+### Added
+
+* Déclaration des routes dans `routes/web.php`.
+* Intégration de FastRoute.
+* Gestion des routes `FOUND`, `NOT_FOUND` et `METHOD_NOT_ALLOWED`.
+* Ajout de l'en-tête HTTP `Allow` pour les réponses 405.
 
 ## [0.11.0] - 2026-09-06
+
 ### Added
-- config/container.php avec définitions PHP-DI (autowire + factory)
+
+* Ajout des définitions PHP-DI dans `config/container.php`.
+* Mise en place de l'injection automatique des dépendances.
+* Ajout de `ContainerFactory`.
+
 ### Changed
-- public/index.php simplifié : construit le conteneur puis délègue à Application
-- Application reçoit désormais ContainerInterface et Dispatcher par constructeur, et gère le dispatch (déplacé depuis index.php)
+
+* Simplification de `public/index.php`.
+* Déplacement de la logique applicative dans `Application`.
+* Injection des dépendances nécessaires dans les classes concernées.
 
 ## [0.12.0] - 2026-09-06
+
 ### Added
-- PHPUnit et phpunit.xml
-- InMemorySalleRepository et InMemoryReservationRepository (doublures de test)
-- Tests unitaires de CreerReservationService (8 scénarios de la section 5)
-- Tests de validation (SalleValidator, ReservationValidator)
-- Tests d'intégration Eloquent (création, relation, chevauchement, annulation)
+
+* Configuration de PHPUnit avec `phpunit.xml`.
+* Ajout des doublures de repositories en mémoire pour les tests unitaires.
+* Ajout des tests unitaires de `CreerReservationService`.
+* Tests des règles de validation de `SalleValidator`.
+* Tests des règles de validation de `ReservationValidator`.
+* Ajout des tests d'intégration Eloquent.
+* Tests des relations entre `Salle` et `Reservation`.
+* Tests de détection des chevauchements.
+* Tests d'annulation des réservations.
+
+## [1.0.0] - 2026-09-09
+
+### Added
+
+* Finalisation de l'application.
+* Ajout du diagramme de classes.
+* Ajout et amélioration du README.
+* Finalisation de la gestion des erreurs HTTP.
+* Finalisation de la configuration Docker.
+* Ajout des scripts CLI.
+* Finalisation de l'intégration des composants de l'application.
+
+### Fixed
+
+* Correction de la vérification d'existence des tables dans les migrations.
+* Correction de différents problèmes de configuration et de finalisation du projet.

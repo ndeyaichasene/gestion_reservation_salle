@@ -14,8 +14,9 @@ use App\Service\AnnulerReservationService;
 use App\Service\CreerReservationService;
 use App\Validation\ReservationValidator;
 use App\View\Renderer;
+use App\View\Response;
 
-final class ReservationController
+final class ReservationController extends AbstractController
 {
     public function __construct(
         private readonly ReservationRepositoryInterface $reservations,
@@ -23,13 +24,16 @@ final class ReservationController
         private readonly CreerReservationService $creerService,
         private readonly AnnulerReservationService $annulerService,
         private readonly ReservationValidator $validator,
-        private readonly Renderer $renderer
+        Renderer $renderer
     ) {
+        parent::__construct($renderer);
     }
 
-    public function index(): string
+    public function index(): Response
     {
-        $salleId = isset($_GET['salle_id']) && $_GET['salle_id'] !== '' ? (int) $_GET['salle_id'] : null;
+        $salleId = isset($_GET['salle_id']) && $_GET['salle_id'] !== ''
+            ? (int) $_GET['salle_id']
+            : null;
 
         if ($salleId !== null) {
             $reservations = $this->reservations->getReservationBySalle($salleId);
@@ -39,45 +43,41 @@ final class ReservationController
 
         $salles = $this->salles->getAllSalles();
 
-        return $this->renderer->renderView('reservation/index', [
+        return new Response([
             'title'           => 'Gestion des réservations',
             'reservations'    => $reservations,
             'salles'          => $salles,
             'selectedSalleId' => $salleId,
-        ]);
+        ], 'reservation/index');
     }
 
-    public function show(int $id): string
+    public function show(int $id): Response
     {
         $reservation = $this->reservations->getReservationById($id);
 
         if ($reservation === null) {
-            http_response_code(404);
-
-            return $this->renderer->renderView('error/404', [
-                'title' => 'Réservation introuvable',
-            ]);
+            return $this->renderNotFound('Réservation introuvable');
         }
 
-        return $this->renderer->renderView('reservation/show', [
+        return new Response([
             'title'       => 'Détail de la réservation #' . $reservation->id,
             'reservation' => $reservation,
-        ]);
+        ], 'reservation/show');
     }
 
-    public function create(): string
+    public function create(): Response
     {
         $salles = $this->salles->getAllSalles();
 
-        return $this->renderer->renderView('reservation/form', [
+        return new Response([
             'title'  => 'Réserver une salle',
             'salles' => $salles,
             'data'   => [],
             'errors' => [],
-        ]);
+        ], 'reservation/form');
     }
 
-    public function store(): string
+    public function store(): Response
     {
         $input = $_POST;
 
@@ -86,12 +86,12 @@ final class ReservationController
         if (!$validation->isValid()) {
             $salles = $this->salles->getAllSalles();
 
-            return $this->renderer->renderView('reservation/form', [
+            return new Response([
                 'title'  => 'Réserver une salle',
                 'salles' => $salles,
                 'data'   => $input,
-                'errors' => $validation->errors(),
-            ]);
+                'errors' => $this->formatErrors($validation->errors()),
+            ], 'reservation/form');
         }
 
         try {
@@ -105,25 +105,23 @@ final class ReservationController
                 '/reservations',
                 'Réservation confirmée avec succès.'
             );
-
-            return '';
         } catch (
             SalleIndisponibleException |
             ReservationInvalideException $e
         ) {
             $salles = $this->salles->getAllSalles();
 
-            return $this->renderer->renderView('reservation/form', [
+            return new Response([
                 'title'        => 'Réserver une salle',
                 'salles'       => $salles,
                 'data'         => $input,
                 'errors'       => [],
                 'generalError' => $e->getMessage(),
-            ]);
+            ], 'reservation/form');
         }
     }
 
-    public function cancel(int $id): string
+    public function cancel(int $id): void
     {
         try {
             $this->annulerService->annuler($id);
@@ -139,7 +137,5 @@ final class ReservationController
                 $e->getMessage()
             );
         }
-
-        return '';
     }
 }

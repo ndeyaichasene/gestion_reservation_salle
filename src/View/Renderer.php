@@ -71,14 +71,11 @@ final class Renderer
 
     public static function e(?string $value): string
     {
-        return htmlspecialchars(
-            (string) $value,
-            ENT_QUOTES,
-            'UTF-8'
-        );
+        return htmlspecialchars( (string) $value, ENT_QUOTES,'UTF-8');
     }
 
-    public function redirect(string $url,?string $success = null,?string $error = null): void {
+    public function redirect(string $url, ?string $success = null, ?string $error = null): never
+    {
         if ($success !== null) {
             $_SESSION['flash_success'] = $success;
         }

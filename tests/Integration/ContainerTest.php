@@ -18,25 +18,10 @@ final class ContainerTest extends TestCase
     {
         $container = ContainerFactory::create();
 
-        $this->assertInstanceOf(
-            SalleRepositoryInterface::class,
-            $container->get(SalleRepositoryInterface::class)
-        );
-        $this->assertInstanceOf(
-            ReservationRepositoryInterface::class,
-            $container->get(ReservationRepositoryInterface::class)
-        );
-        $this->assertInstanceOf(
-            SalleController::class,
-            $container->get(SalleController::class)
-        );
-        $this->assertInstanceOf(
-            ReservationController::class,
-            $container->get(ReservationController::class)
-        );
-        $this->assertInstanceOf(
-            Application::class,
-            $container->get(Application::class)
-        );
+        $this->assertInstanceOf( SalleRepositoryInterface::class,$container->get(SalleRepositoryInterface::class));
+        $this->assertInstanceOf( ReservationRepositoryInterface::class,$container->get(ReservationRepositoryInterface::class));
+        $this->assertInstanceOf( SalleController::class, $container->get(SalleController::class));
+        $this->assertInstanceOf( ReservationController::class, $container->get(ReservationController::class));
+        $this->assertInstanceOf( Application::class, $container->get(Application::class));
     }
 }

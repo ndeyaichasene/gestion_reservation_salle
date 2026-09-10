@@ -6,6 +6,10 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 
 use App\Application;
 use App\config\ContainerFactory;
+use Dotenv\Dotenv;
+
+$dotenv = Dotenv::createImmutable(dirname(__DIR__));
+$dotenv->safeLoad();
 
 $container = ContainerFactory::create();
 

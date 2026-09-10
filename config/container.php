@@ -19,30 +19,33 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 
 use function DI\autowire;
 use function DI\factory;
+use function DI\get;
+use function DI\value;
+
+use App\View\HtmlResponseFormatter;
+use App\View\JsonResponseFormatter;
+use App\View\ResponseFormatterInterface;
 
 return [
+    'response.format' => value($_ENV['APP_RESPONSE_FORMAT'] ?? 'html'),
+
+    Application::class => autowire(Application::class)->constructorParameter('responseFormatter',get(ResponseFormatterInterface::class)),
 
     SalleRepositoryInterface::class => autowire(SalleRepository::class),
 
     ReservationRepositoryInterface::class => autowire(ReservationRepository::class),
 
-
     Capsule::class => factory(function (): Capsule {
-
         $bootDatabase = require dirname(__DIR__) . '/config/database.php';
 
         return $bootDatabase();
     }),
 
-
-
     Dispatcher::class => factory(function (): Dispatcher {
-
         $routes = require dirname(__DIR__) . '/routes/web.php';
 
         return \FastRoute\simpleDispatcher($routes);
     }),
-
 
     Renderer::class => autowire(Renderer::class),
 
@@ -58,5 +61,15 @@ return [
 
     ReservationController::class => autowire(ReservationController::class),
 
-    Application::class => autowire(Application::class),
+    HtmlResponseFormatter::class => autowire(HtmlResponseFormatter::class),
+
+    JsonResponseFormatter::class => autowire(JsonResponseFormatter::class),
+
+    ResponseFormatterInterface::class => factory(
+        function ($container): ResponseFormatterInterface {
+            $format = $_ENV['APP_RESPONSE_FORMAT'] ?? 'html';
+
+            return $format === 'json' ? $container->get(JsonResponseFormatter::class) : $container->get(HtmlResponseFormatter::class);
+        }
+    ),
 ];

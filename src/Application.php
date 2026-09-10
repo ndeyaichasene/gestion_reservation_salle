@@ -7,6 +7,8 @@ namespace App;
 use App\Controller\ReservationController;
 use App\Controller\SalleController;
 use App\View\Renderer;
+use App\View\Response;
+use App\View\ResponseFormatterInterface;
 use FastRoute\Dispatcher;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
@@ -17,12 +19,15 @@ final class Application
         private readonly Renderer $renderer,
         private readonly SalleController $salleController,
         private readonly ReservationController $reservationController,
-        private readonly Capsule $capsule
-    ) {}
+        private readonly Capsule $capsule,
+        private readonly ResponseFormatterInterface $responseFormatter
+    ) {
+    }
 
     public function run(): void
     {
         $this->capsule->getConnection();
+
         $httpMethod = $_SERVER['REQUEST_METHOD'] ?? 'GET';
         $uri = $_SERVER['REQUEST_URI'] ?? '/';
 
@@ -32,7 +37,10 @@ final class Application
 
         $uri = rawurldecode($uri);
 
-        $routeInfo = $this->dispatcher->dispatch($httpMethod, $uri);
+        $routeInfo = $this->dispatcher->dispatch(
+            $httpMethod,
+            $uri
+        );
 
         switch ($routeInfo[0]) {
             case Dispatcher::NOT_FOUND:
@@ -42,6 +50,7 @@ final class Application
                     'error/404',
                     ['title' => '404 - Page introuvable']
                 );
+
                 break;
 
             case Dispatcher::METHOD_NOT_ALLOWED:
@@ -49,7 +58,9 @@ final class Application
 
                 http_response_code(405);
 
-                header('Allow: ' . implode(', ', $allowedMethods));
+                header(
+                    'Allow: ' . implode(', ', $allowedMethods)
+                );
 
                 echo $this->renderer->renderView(
                     'error/405',
@@ -58,6 +69,7 @@ final class Application
                         'allowedMethods' => $allowedMethods,
                     ]
                 );
+
                 break;
 
             case Dispatcher::FOUND:
@@ -68,6 +80,7 @@ final class Application
                 $controller = match ($controllerClass) {
                     SalleController::class => $this->salleController,
                     ReservationController::class => $this->reservationController,
+
                     default => throw new \RuntimeException(
                         "Contrôleur inconnu : {$controllerClass}"
                     ),
@@ -109,9 +122,7 @@ final class Application
 
                 $response = $controller->$action(...$args);
 
-                if (is_string($response) && $response !== '') {
-                    echo $response;
-                }
+                echo $this->responseFormatter->format($response);
 
                 break;
         }

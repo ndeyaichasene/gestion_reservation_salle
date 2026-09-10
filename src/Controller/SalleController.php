@@ -9,53 +9,52 @@ use App\Model\Salle;
 use App\Repository\SalleRepositoryInterface;
 use App\Validation\SalleValidator;
 use App\View\Renderer;
+use App\View\Response;
 
-final class SalleController
+final class SalleController extends AbstractController
 {
     public function __construct(
         private readonly SalleRepositoryInterface $salles,
         private readonly SalleValidator $validator,
-        private readonly Renderer $renderer
+        Renderer $renderer
     ) {
+        parent::__construct($renderer);
     }
 
-    public function index(): string
+    public function index(): Response
     {
         $salles = $this->salles->getAllSalles();
 
-        return $this->renderer->renderView('salle/index', [
+        return new Response([
             'title'  => 'Parc des Salles',
             'salles' => $salles,
-        ]);
+        ], 'salle/index');
     }
 
-    public function show(int $id): string
+    public function show(int $id): Response
     {
         $salle = $this->salles->getSalleById($id);
 
         if ($salle === null) {
-            http_response_code(404);
-
-            return $this->renderer->renderView('error/404', [
-                'title' => 'Salle introuvable',
-            ]);
+            return $this->renderNotFound('Salle introuvable');
         }
 
-        return $this->renderer->renderView('salle/show', [
+        return new Response([
             'title' => $salle->nom,
             'salle' => $salle,
-        ]);
+        ], 'salle/show');
     }
 
-    public function create(): string
+    public function create(): Response
     {
-        return $this->renderer->renderView('salle/form', [
-            'title' => 'Ajouter une salle',
-            'data'  => [],
-        ]);
+        return new Response([
+            'title'  => 'Ajouter une salle',
+            'data'   => [],
+            'errors' => [],
+        ], 'salle/form');
     }
 
-    public function store(): string
+    public function store(): Response
     {
         $input = $_POST;
         $input['active'] = isset($_POST['active']);
@@ -63,11 +62,11 @@ final class SalleController
         $validation = $this->validator->validate($input);
 
         if (!$validation->isValid()) {
-            return $this->renderer->renderView('salle/form', [
+            return new Response([
                 'title'  => 'Ajouter une salle',
-                'errors' => $validation->errors(),
+                'errors' => $this->formatErrors($validation->errors()),
                 'data'   => $input,
-            ]);
+            ], 'salle/form');
         }
 
         $dto = CreerSalleDTO::fromArray($validation->data());
@@ -86,39 +85,30 @@ final class SalleController
             '/salles',
             'Salle enregistrée avec succès.'
         );
-
-        return '';
     }
 
-    public function edit(int $id): string
+    public function edit(int $id): Response
     {
         $salle = $this->salles->getSalleById($id);
 
         if ($salle === null) {
-            http_response_code(404);
-
-            return $this->renderer->renderView('error/404', [
-                'title' => 'Salle introuvable',
-            ]);
+            return $this->renderNotFound('Salle introuvable');
         }
 
-        return $this->renderer->renderView('salle/form', [
-            'title' => 'Modifier la salle ' . $salle->nom,
-            'salle' => $salle,
-            'data'  => [],
-        ]);
+        return new Response([
+            'title'  => 'Modifier la salle ' . $salle->nom,
+            'salle'  => $salle,
+            'data'   => [],
+            'errors' => [],
+        ], 'salle/form');
     }
 
-    public function update(int $id): string
+    public function update(int $id): Response
     {
         $salle = $this->salles->getSalleById($id);
 
         if ($salle === null) {
-            http_response_code(404);
-
-            return $this->renderer->renderView('error/404', [
-                'title' => 'Salle introuvable',
-            ]);
+            return $this->renderNotFound('Salle introuvable');
         }
 
         $input = $_POST;
@@ -127,12 +117,12 @@ final class SalleController
         $validation = $this->validator->validate($input);
 
         if (!$validation->isValid()) {
-            return $this->renderer->renderView('salle/form', [
+            return new Response([
                 'title'  => 'Modifier la salle ' . $salle->nom,
                 'salle'  => $salle,
-                'errors' => $validation->errors(),
+                'errors' => $this->formatErrors($validation->errors()),
                 'data'   => $input,
-            ]);
+            ], 'salle/form');
         }
 
         $dto = CreerSalleDTO::fromArray($validation->data());
@@ -149,7 +139,6 @@ final class SalleController
             "/salles/{$id}",
             'Modifications enregistrées avec succès.'
         );
-
-        return '';
     }
 }
+

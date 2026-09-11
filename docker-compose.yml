@@ -45,6 +45,20 @@ services:
       DB_PASSWORD: ${DB_PASSWORD:-passer}
     networks:
       - salles_net
+  # phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8082:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    networks:
+      - salles_net
 
 volumes:
   mysql_data:

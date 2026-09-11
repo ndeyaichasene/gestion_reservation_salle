@@ -7,7 +7,7 @@ namespace App\Controller;
 use App\DTO\CreerSalleDTO;
 use App\Model\Salle;
 use App\Repository\SalleRepositoryInterface;
-use App\Validation\SalleValidator;
+use App\Validation\SalleValidatorInterface;
 use App\View\Renderer;
 use App\View\Response;
 
@@ -16,7 +16,7 @@ final class SalleController extends AbstractController
     public const NBRSALLEPARPAGE = 5;
     public function __construct(
         private readonly SalleRepositoryInterface $salles,
-        private readonly SalleValidator $validator,
+        private readonly SalleValidatorInterface $validator,
         Renderer $renderer
     ) {
         parent::__construct($renderer);

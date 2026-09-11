@@ -12,19 +12,20 @@ use App\Repository\ReservationRepositoryInterface;
 use App\Repository\SalleRepositoryInterface;
 use App\Service\AnnulerReservationService;
 use App\Service\CreerReservationService;
-use App\Validation\ReservationValidator;
+use App\Validation\ReservationValidatorInterface;
 use App\View\Renderer;
 use App\View\Response;
 
 final class ReservationController extends AbstractController
 {
     public const NBRRESERVATIONPARPAGE = 2;
+    
     public function __construct(
         private readonly ReservationRepositoryInterface $reservations,
         private readonly SalleRepositoryInterface $salles,
         private readonly CreerReservationService $creerService,
         private readonly AnnulerReservationService $annulerService,
-        private readonly ReservationValidator $validator,
+        private readonly ReservationValidatorInterface $validator,
         Renderer $renderer
     ) {
         parent::__construct($renderer);

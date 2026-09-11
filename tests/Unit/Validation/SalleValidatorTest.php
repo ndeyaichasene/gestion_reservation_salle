@@ -16,6 +16,12 @@ final class SalleValidatorTest extends TestCase
         $this->validator = new SalleValidator();
     }
 
+    public function testImplementeInterfaces(): void
+    {
+        $this->assertInstanceOf(\App\Validation\SalleValidatorInterface::class, $this->validator);
+        $this->assertInstanceOf(\App\Validation\ValidatorInterface::class, $this->validator);
+    }
+
     private function donneesValides(): array
     {
         return [

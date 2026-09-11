@@ -1,10 +1,10 @@
 <?php
-
 declare(strict_types=1);
 
-namespace  App\Repository;
+namespace App\Repository;
 
 use App\Model\Salle;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class SalleRepository implements SalleRepositoryInterface{
 
@@ -23,6 +23,16 @@ class SalleRepository implements SalleRepositoryInterface{
 
         $salle = Salle::find($id);
         return $salle;
+    }
+
+    public function getSallesPaginated( int $perPage, int $page ): LengthAwarePaginator
+    {
+        return Salle::query()->paginate(
+            $perPage,
+            ['*'],
+            'page',
+            $page
+        );
     }
 
 }

@@ -224,6 +224,17 @@ main.main-content {
     padding: 0.35rem 0.75rem;
     font-size: 0.82rem;
 }
+.pagination .btn {
+    padding: 0.30rem 0.5rem;
+    font-size: 0.85rem;
+    min-width: 10px;
+    margin: 5px ;
+}
+.pagination {
+    display: flex;
+    justify-content: flex-end;
+    
+}
 
 /* --------------------------------------------------------------------------
    Cartes & Conteneurs

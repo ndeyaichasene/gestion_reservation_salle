@@ -6,6 +6,7 @@ namespace Tests\Unit\Service\Stub;
 
 use App\Model\Salle;
 use App\Repository\SalleRepositoryInterface;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 final class InMemorySalleRepository implements SalleRepositoryInterface
 {
@@ -31,4 +32,22 @@ final class InMemorySalleRepository implements SalleRepositoryInterface
     {
         return $this->salles[$id] ?? null;
     }
+
+    public function getSallesPaginated(int $perPage, int $page): LengthAwarePaginator
+    {
+        $salles = array_values($this->salles);
+
+        $offset = ($page - 1) * $perPage;
+
+        $items = array_slice($salles, $offset, $perPage);
+
+        return new LengthAwarePaginator(
+            $items,
+            count($salles),
+            $perPage,
+            $page
+        );
+    }
+
+    
 }

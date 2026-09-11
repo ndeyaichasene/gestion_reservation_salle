@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Model\Salle;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 interface SalleRepositoryInterface{
 
@@ -12,4 +13,6 @@ interface SalleRepositoryInterface{
     public function getAllSalles():array;
 
     public function getSalleById(int $id):?Salle;
+
+    public function getSallesPaginated(int $perPage, int $page): LengthAwarePaginator;
 }

@@ -18,6 +18,7 @@ use App\View\Response;
 
 final class ReservationController extends AbstractController
 {
+    public const NBRRESERVATIONPARPAGE = 2;
     public function __construct(
         private readonly ReservationRepositoryInterface $reservations,
         private readonly SalleRepositoryInterface $salles,
@@ -31,23 +32,60 @@ final class ReservationController extends AbstractController
 
     public function index(): Response
     {
-        $salleId = isset($_GET['salle_id']) && $_GET['salle_id'] !== ''
-            ? (int) $_GET['salle_id']
-            : null;
+        $salleId = isset($_GET['salle_id']) && $_GET['salle_id'] !== '' ? (int) $_GET['salle_id'] : null;
+
+        $page = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
 
         if ($salleId !== null) {
-            $reservations = $this->reservations->getReservationBySalle($salleId);
+            $reservations = $this->reservations->getReservationsBySallePaginated($salleId, self::NBRRESERVATIONPARPAGE, $page);
         } else {
-            $reservations = $this->reservations->getAllReservations();
+            $reservations = $this->reservations->getReservationsPaginated(self::NBRRESERVATIONPARPAGE, $page);
         }
 
         $salles = $this->salles->getAllSalles();
 
+        $current = $reservations->currentPage();
+        $last = $reservations->lastPage();
+        $show = $last > 1;
+
+        $pages = [];
+
+        for ($i = 1; $i <= $last; $i++) {
+            $pages[] = [
+                'number' => $i,
+                'url' => '?'
+                    . ($salleId !== null ? 'salle_id=' . $salleId . '&' : '')
+                    . 'page=' . $i,
+            ];
+        }
+
+        $pagination = [
+            'show' => $show,
+            'current' => $current,
+            'pages' => $pages,
+            'hasPrevious' => !$reservations->onFirstPage(),
+            'hasNext' => $reservations->hasMorePages(),
+            'previousUrl' => '?'
+                . ($salleId !== null ? 'salle_id=' . $salleId . '&' : '')
+                . 'page=' . ($current - 1),
+            'nextUrl' => '?'
+                . ($salleId !== null ? 'salle_id=' . $salleId . '&' : '')
+                . 'page=' . ($current + 1),
+        ];
+        $emptyMessage = null;
+
+if ($reservations->isEmpty()) {
+    $emptyMessage = $salleId !== null
+        ? 'Aucune réservation pour cette salle.'
+        : 'Aucune réservation trouvée.';
+}
         return new Response([
-            'title'           => 'Gestion des réservations',
-            'reservations'    => $reservations,
-            'salles'          => $salles,
+            'title' => 'Gestion des réservations',
+            'reservations' => $reservations,
+            'salles' => $salles,
             'selectedSalleId' => $salleId,
+            'pagination' => $pagination,
+            'emptyMessage'=>$emptyMessage
         ], 'reservation/index');
     }
 

@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 namespace App\Repository;
+
 use App\Model\Reservation;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ReservationRepository implements ReservationRepositoryInterface{
     public function save(Reservation $reservation):int
@@ -45,4 +47,26 @@ class ReservationRepository implements ReservationRepositoryInterface{
         $reservation->save();
         return $reservation;
     }
+
+     public function getReservationsPaginated( int $perPage, int $page ): LengthAwarePaginator
+    {
+        return Reservation::query()->paginate(
+            $perPage,
+            ['*'],
+            'page',
+            $page
+        );
+    }
+
+        public function getReservationsBySallePaginated(int $salleId,int $perPage,int $page): LengthAwarePaginator
+    {
+        return Reservation::where('salle_id', $salleId)->paginate(
+            $perPage,
+            ['*'],
+            'page',
+            $page
+        );
+    }
+
+    
 }

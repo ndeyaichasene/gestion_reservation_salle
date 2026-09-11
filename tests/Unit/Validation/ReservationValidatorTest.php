@@ -16,6 +16,12 @@ final class ReservationValidatorTest extends TestCase
         $this->validator = new ReservationValidator();
     }
 
+    public function testImplementeInterfaces(): void
+    {
+        $this->assertInstanceOf(\App\Validation\ReservationValidatorInterface::class, $this->validator);
+        $this->assertInstanceOf(\App\Validation\ValidatorInterface::class, $this->validator);
+    }
+
     private function donneesValides(): array
     {
         return [

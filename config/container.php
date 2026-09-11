@@ -3,8 +3,6 @@
 declare(strict_types=1);
 
 use App\Application;
-use App\Controller\ReservationController;
-use App\Controller\SalleController;
 use App\Repository\ReservationRepository;
 use App\Repository\ReservationRepositoryInterface;
 use App\Repository\SalleRepository;
@@ -12,7 +10,9 @@ use App\Repository\SalleRepositoryInterface;
 use App\Service\AnnulerReservationService;
 use App\Service\CreerReservationService;
 use App\Validation\ReservationValidator;
+use App\Validation\ReservationValidatorInterface;
 use App\Validation\SalleValidator;
+use App\Validation\SalleValidatorInterface;
 use App\View\Renderer;
 use FastRoute\Dispatcher;
 use Illuminate\Database\Capsule\Manager as Capsule;
@@ -49,17 +49,13 @@ return [
 
     Renderer::class => autowire(Renderer::class),
 
-    SalleValidator::class => autowire(SalleValidator::class),
+    SalleValidatorInterface::class => autowire(SalleValidator::class),
 
-    ReservationValidator::class => autowire(ReservationValidator::class),
+    ReservationValidatorInterface::class => autowire(ReservationValidator::class),
 
     CreerReservationService::class => autowire(CreerReservationService::class),
 
     AnnulerReservationService::class => autowire(AnnulerReservationService::class),
-
-    SalleController::class => autowire(SalleController::class),
-
-    ReservationController::class => autowire(ReservationController::class),
 
     HtmlResponseFormatter::class => autowire(HtmlResponseFormatter::class),
 

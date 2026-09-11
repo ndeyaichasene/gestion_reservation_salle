@@ -6,6 +6,7 @@ namespace Tests\Unit\Service\Stub;
 
 use App\Model\Reservation;
 use App\Repository\ReservationRepositoryInterface;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 final class InMemoryReservationRepository implements ReservationRepositoryInterface
 {
@@ -68,4 +69,36 @@ final class InMemoryReservationRepository implements ReservationRepositoryInterf
 
         return $reservation;
     }
+
+    public function getReservationsPaginated( int $perPage, int $page ): LengthAwarePaginator {
+    $reservations = array_values($this->reservations);
+
+    $total = count($reservations);
+    $offset = ($page - 1) * $perPage;
+
+    $items = array_slice($reservations, $offset, $perPage);
+
+    return new LengthAwarePaginator(
+        $items,
+        $total,
+        $perPage,
+        $page
+    );
+}
+
+public function getReservationsBySallePaginated( int $salleId, int $perPage, int $page ): LengthAwarePaginator {
+    $reservations = $this->getReservationBySalle($salleId);
+
+    $total = count($reservations);
+    $offset = ($page - 1) * $perPage;
+
+    $items = array_slice($reservations, $offset, $perPage);
+
+    return new LengthAwarePaginator(
+        $items,
+        $total,
+        $perPage,
+        $page
+    );
+}
 }

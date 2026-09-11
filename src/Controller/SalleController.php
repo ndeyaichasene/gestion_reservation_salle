@@ -7,15 +7,16 @@ namespace App\Controller;
 use App\DTO\CreerSalleDTO;
 use App\Model\Salle;
 use App\Repository\SalleRepositoryInterface;
-use App\Validation\SalleValidator;
+use App\Validation\SalleValidatorInterface;
 use App\View\Renderer;
 use App\View\Response;
 
 final class SalleController extends AbstractController
 {
+    public const NBRSALLEPARPAGE = 5;
     public function __construct(
         private readonly SalleRepositoryInterface $salles,
-        private readonly SalleValidator $validator,
+        private readonly SalleValidatorInterface $validator,
         Renderer $renderer
     ) {
         parent::__construct($renderer);
@@ -23,11 +24,30 @@ final class SalleController extends AbstractController
 
     public function index(): Response
     {
-        $salles = $this->salles->getAllSalles();
+        $page = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
+        $salles = $this->salles->getSallesPaginated(self::NBRSALLEPARPAGE,$page);
+        $current= $salles->currentPage();
+        $last = $salles->lastPage();
+        $previous = $current - 1;
+        $next = $current + 1;
+        $pages = [];
+        for ($i=1; $i <= $last; $i++) { 
+           $pages []= $i;
+        }
+         $pagination = [
+            'current'=> $current,
+            'last' => $last,
+            'pages' => $pages,
+            'hasPrevious' => !$salles->onFirstPage(),
+            'hasNext' => $salles->hasMorePages(),
+            'previous' =>$previous,
+            'next' => $next
+        ];
 
         return new Response([
             'title'  => 'Parc des Salles',
             'salles' => $salles,
+            'pagination' => $pagination,
         ], 'salle/index');
     }
 

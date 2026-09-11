@@ -7,7 +7,7 @@ namespace App\Validation;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\NestedValidationException;
 
-final class SalleValidator implements ValidatorInterface
+final class SalleValidator implements SalleValidatorInterface
 {
 
     private const TYPES_AUTORISES = ['cours','informatique','laboratoire','amphitheatre','reunion'];
@@ -16,11 +16,11 @@ final class SalleValidator implements ValidatorInterface
     {
 
         $regles = [
-            'nom' => v::stringType()->notEmpty()->length(2,100),
+            'nom'      => v::stringType()->notEmpty()->length(2,100),
             'batiment' => v::stringType()->notEmpty()->length(2,100),
             'capacite' => v::intVal()->between(1,1000),
-            'type' => v::in(self::TYPES_AUTORISES),
-            'active' => v::boolVal()
+            'type'     => v::in(self::TYPES_AUTORISES),
+            'active'   => v::boolVal()
         ];
 
         $errors = [];

@@ -7,6 +7,7 @@ $anciennesValeurs = $anciennesValeurs ?? $data ?? $viewData['data'] ?? $viewData
 $erreurGlobale    = $erreurGlobale ?? $viewData['erreurGlobale'] ?? $erreurs['global'] ?? null;
 $isEdit           = $salle !== null;
 $formAction       = $isEdit ? "/salles/{$salle->id}/edit" : "/salles";
+$csrf_token = $csrf_token ?? $viewData['csrf_token'] ?? '';
 ?>
 
 <div class="page-header">
@@ -25,16 +26,10 @@ $formAction       = $isEdit ? "/salles/{$salle->id}/edit" : "/salles";
     <?php endif; ?>
 
     <form method="post" action="<?= $formAction ?>" style="display: flex; flex-direction: column; gap: 1.25rem;">
+        <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
         <div class="form-group">
             <label for="nom">Nom de la salle *</label>
-            <input 
-                type="text" 
-                id="nom"
-                name="nom" 
-                class="form-control <?= isset($erreurs['nom']) ? 'is-invalid' : '' ?>"
-                value="<?= htmlspecialchars($anciennesValeurs['nom'] ?? $salle->nom ?? '') ?>" 
-                required
-            >
+            <input  type="text"  id="nom" name="nom"  class="form-control <?= isset($erreurs['nom']) ? 'is-invalid' : '' ?>" value="<?= htmlspecialchars($anciennesValeurs['nom'] ?? $salle->nom ?? '') ?>"  required >
             <?php if (isset($erreurs['nom'])): ?>
                 <span class="erreur-text"><?= htmlspecialchars($erreurs['nom']) ?></span>
             <?php endif; ?>
@@ -42,14 +37,7 @@ $formAction       = $isEdit ? "/salles/{$salle->id}/edit" : "/salles";
 
         <div class="form-group">
             <label for="batiment">Bâtiment *</label>
-            <input 
-                type="text" 
-                id="batiment"
-                name="batiment" 
-                class="form-control <?= isset($erreurs['batiment']) ? 'is-invalid' : '' ?>"
-                value="<?= htmlspecialchars($anciennesValeurs['batiment'] ?? $salle->batiment ?? '') ?>" 
-                required
-            >
+            <input  type="text"  id="batiment" name="batiment"  class="form-control <?= isset($erreurs['batiment']) ? 'is-invalid' : '' ?>" value="<?= htmlspecialchars($anciennesValeurs['batiment'] ?? $salle->batiment ?? '') ?>"  required >
             <?php if (isset($erreurs['batiment'])): ?>
                 <span class="erreur-text"><?= htmlspecialchars($erreurs['batiment']) ?></span>
             <?php endif; ?>
@@ -57,15 +45,7 @@ $formAction       = $isEdit ? "/salles/{$salle->id}/edit" : "/salles";
 
         <div class="form-group">
             <label for="capacite">Capacité d'accueil (places) *</label>
-            <input 
-                type="number" 
-                id="capacite"
-                name="capacite" 
-                min="1"
-                class="form-control <?= isset($erreurs['capacite']) ? 'is-invalid' : '' ?>"
-                value="<?= htmlspecialchars((string) ($anciennesValeurs['capacite'] ?? $salle->capacite ?? '')) ?>" 
-                required
-            >
+            <input  type="number"  id="capacite" name="capacite"  min="1" class="form-control <?= isset($erreurs['capacite']) ? 'is-invalid' : '' ?>" value="<?= htmlspecialchars((string) ($anciennesValeurs['capacite'] ?? $salle->capacite ?? '')) ?>"  required >
             <?php if (isset($erreurs['capacite'])): ?>
                 <span class="erreur-text"><?= htmlspecialchars($erreurs['capacite']) ?></span>
             <?php endif; ?>
@@ -90,13 +70,7 @@ $formAction       = $isEdit ? "/salles/{$salle->id}/edit" : "/salles";
         </div>
 
         <div class="form-check">
-            <input 
-                type="checkbox" 
-                id="active"
-                name="active" 
-                value="1" 
-                <?= ($anciennesValeurs['active'] ?? $salle->active ?? true) ? 'checked' : '' ?>
-            >
+            <input  type="checkbox"  id="active" name="active"  value="1"  <?= ($anciennesValeurs['active'] ?? $salle->active ?? true) ? 'checked' : '' ?> >
             <label for="active">Salle active (ouverte aux réservations)</label>
         </div>
 

@@ -9,6 +9,7 @@ use App\View\Renderer;
 use App\View\Response;
 use App\View\ResponseFormatterInterface;
 use PHPUnit\Framework\TestCase;
+use App\Session\SessionManager;
 
 final class HtmlResponseFormatterTest extends TestCase
 {
@@ -16,7 +17,8 @@ final class HtmlResponseFormatterTest extends TestCase
 
     protected function setUp(): void
     {
-        $renderer = new Renderer();
+        $session_manager = new SessionManager();
+        $renderer = new Renderer($session_manager);
         $this->formatter = new HtmlResponseFormatter($renderer);
     }
 

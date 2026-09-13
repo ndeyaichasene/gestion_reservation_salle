@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace App\View;
 
+use App\Session\SessionManager;
+
 final class Renderer
 {
     private string $templateDir;
+    private SessionManager $session_manager;
 
-    public function __construct(?string $templateDir = null)
+    public function __construct(SessionManager $session_manager,?string $templateDir = null)
     {
+        $this->session_manager = $session_manager ;
         $this->templateDir = $templateDir ?? dirname(__DIR__, 2) . '/templates';
 
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
     }
 
     public function renderView(string $template, array $data = [], string $layout = 'layout/base'): string {
@@ -43,14 +44,13 @@ final class Renderer
             throw new \RuntimeException("Layout introuvable : {$layoutPath}");
         }
 
-        $flashSuccess = $_SESSION['flash_success'] ?? null;
-        $flashError = $_SESSION['flash_error'] ?? null;
+        $flashSuccess = $this->session_manager->getSession('flash_success');
+        $flashError = $this->session_manager->getSession('flash_error');
+        
+        $this->session_manager->removeSession('flash_success');
+        $this->session_manager->removeSession('flash_error');
 
-        unset(
-            $_SESSION['flash_success'],
-            $_SESSION['flash_error']
-        );
-
+      
         $viewData = array_merge($data, [
             'contenu'      => $content,
             'flashSuccess' => $flashSuccess,
@@ -77,11 +77,13 @@ final class Renderer
     public function redirect(string $url, ?string $success = null, ?string $error = null): never
     {
         if ($success !== null) {
-            $_SESSION['flash_success'] = $success;
+
+            $this->session_manager->setSession('flash_success', $success);
         }
 
         if ($error !== null) {
-            $_SESSION['flash_error'] = $error;
+
+            $this->session_manager->setSession('flash_error', $error);
         }
 
         header("Location: {$url}");
